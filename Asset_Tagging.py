@@ -14,8 +14,7 @@ base_file = 'C:\\path\\to\\your\\file.txt'
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 base_host_url = "hxxps://hostname:consoleport.yourdomain.com"
-# harcode credentials because I am bad at coding
-# change these to be your creds
+# change these to be your creds, and No i do not feel bad about hardcoded creds for a local script
 r7_username = "Your API User"
 r7_password = "Your API User Credentials"
 
