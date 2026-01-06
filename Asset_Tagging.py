@@ -7,6 +7,7 @@ import json
 
 # file with hostnames you want to tag in the console
 # input should be \n separated hostnames, NOT COMMA SEPARATED
+# used by CreateTag() function, not required if you are tagging a single asset
 base_file = 'C:\\path\\to\\your\\file.txt'
 
 # disable the SSL certificate warning, otherwise script may error due to cert
