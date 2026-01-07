@@ -5,3 +5,6 @@ These scripts can be used to perform various functions with the API endpoints th
 
 # PowerShell Scripts
 General Purpose scripts for various things which are generally associated with Cybersecurity. These are a little bit niche.
+
+# Google Secops
+Detection Library for Google SecOps SIEM
