@@ -1,12 +1,10 @@
 rule service_account_interactive_logon {
 
   meta:
-    // WORK IN PROGRESS
     author = "max-h471"
     description = "Detects service accounts being used interactively"
     log_type = "WINEVTLOG"
     severity = "Medium"
-    playbook = "Identity Alerts"
     mitre_attack_technique = "Compromise Accounts"
     mitre_attack_technique_id = "T1586"
     mitre_attack_url = "https://attack.mitre.org/techniques/T1586/"
