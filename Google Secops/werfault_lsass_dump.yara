@@ -1,0 +1,38 @@
+rule werfault_lsass_dump {
+
+  meta:
+    author = "max-h471"
+    description = "Detects process LSASS memory dump that occur while using Mimikatz, NanoDump, Invoke-Mimikatz, Procdump or Taskmgr based on the CallTrace pointing to ntdll.dll, dbghelp.dll or dbgcore.dll for Windows and Windows Server"
+    rule_name = "Credential Dumping Attempt Via WerFault"
+    tactic = "TA0006"
+    technique = "T1003.001"
+    log_type = "MICROSOFT_DEFENDER_ENDPOINT"    
+    severity = "Medium"
+    false_positives = "Actual failures in lsass.exe that trigger a crash dump (unlikely), unknown cases in which WerFault accesses lsass.exe"
+
+  events:
+    re.regex($process.target.process.file.full_path, `\\lsass\.exe$`) nocase
+    re.regex($process.principal.process.file.full_path, `\\werfault\.exe$`) nocase
+    $process.target.resource.name = "0x1FFFFF" nocase
+    $process.principal.hostname = $hostname
+
+  match:
+    $hostname over 5m
+
+  outcome:
+    $principal_process_pid = array_distinct($process.principal.process.pid)
+    $principal_process_command_line = array_distinct($process.principal.process.command_line)
+    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)
+    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)
+    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)
+    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)
+    $target_process_pid = array_distinct($process.target.process.pid)
+    $target_process_command_line = array_distinct($process.target.process.command_line)
+    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)
+    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)
+    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)
+    $log_type = array_distinct(strings.concat($process.metadata.log_type,"/",$process.metadata.product_event_type))
+
+  condition:
+    $process
+}
