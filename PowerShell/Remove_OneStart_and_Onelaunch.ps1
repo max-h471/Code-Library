@@ -1,5 +1,6 @@
 # Onestart is a web browser and search engine that typically gets bundle-installed with other programs. It is a grayware/adware program that sets itself as the primary borwser and
 # exports various information about a user and their device. This script removes it. It is so common to be bundled with other software that I had to create a script to remove it
+# Onelaunch is basically the same thing with a slightly different UI
 
 # Kill OneStart and OneLaunch processes
 Taskkill /F /IM Onestart* /T
