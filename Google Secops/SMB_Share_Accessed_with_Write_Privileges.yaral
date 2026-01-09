@@ -1,0 +1,31 @@
+rule SMB_Share_Accessed_with_Write_Privileges {
+
+  meta:
+    author = "max-h471"
+    description = "Detects when the ADMIN$, IPC$, and C$ SMB fileshares are accessed by a user who has the ability to write data to it"
+    severity = "Medium"
+    log_type = "WINEVTLOG"
+    mitre_attack_tactic_id = "TA0008"
+    mitre_attack_tactic = "Lateral Movement"
+    mitre_attack_technique_id = "T1021.002"
+
+
+  events:
+    //$e.metadata.event_type = "USER_CREATION"
+    $e.metadata.log_type = "WINEVTLOG" or $e.metadata.log_type = "MICROSOFT_DEFENDER_ENDPOINT"
+    ($e.metadata.product_event_type = /5145/) and 
+    ($e.target.resource.name = /\\\\.*\\ADMIN\$/ or $e.target.resource.name = /\\\\.*\\C\$/ or $e.target.resource.name = /\\\\.*\\IPC\$/) and 
+    ($e.security_result.description = /\%\%4417/) and
+    //or ($e.metadata.product_event_type = "DeviceNetworkEvents" and $e.target.port = 445)
+
+    // This alert is loud, especially SMB access to the c$ share is common, however, tuning should be performed on frequent flyers
+
+  outcome:
+    $risk_score = 30
+    $mitre_attack_tactic = "Lateral Movement"
+    $mitre_attack_technique = "Remote Services: SMB/Windows Admin Shares"
+    $mitre_attack_technique_id = "T1021.002"
+
+  condition:
+    $e
+}
