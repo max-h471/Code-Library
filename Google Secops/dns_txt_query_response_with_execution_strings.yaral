@@ -6,7 +6,6 @@ rule dns_txt_query_response_with_execution_strings {
     Reference = "https://www.hyas.com/blog/harnessing-dns-txt-records-for-malware-execution"
     AdversaryTools = "https://github.com/iagox86/dnscat2 and https://github.com/yarrick/iodine"
     severity = "Medium"
-    Playbook = "Network Alerts"
     mitre_attack_tactic = "Command and Control"
     mitre_attack_technique = "Application Layer Protocl: DNS"
     mitre_attack_url = "https://attack.mitre.org/techniques/T1071/004/"
