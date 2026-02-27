@@ -1,0 +1,9 @@
+// generate a graph of SAMR queries to enumerate users on a domain
+let min_t = toscalar(IdentityQueryEvents | summarize min(Timestamp));
+let max_t = toscalar(IdentityQueryEvents | summarize max(Timestamp));
+IdentityQueryEvents
+| where ActionType contains "Samr"
+| where QueryType == "EnumerateUsers"
+| summarize count() by DestinationDeviceName
+| make-series num=count() default = 0 on Timestamp from min_t to max_t step 1h by DestinationDeviceName
+| render timechart
