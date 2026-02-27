@@ -1,0 +1,4 @@
+DeviceEvents 
+| where ActionType == "ScriptContent"
+| extend Content = extractjson("$.ScriptContent", AdditionalFields)
+| where Content contains ".CopyFromScreen" 
