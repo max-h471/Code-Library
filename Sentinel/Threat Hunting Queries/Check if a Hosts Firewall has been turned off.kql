@@ -1,0 +1,6 @@
+//General Check for any Devices
+SecurityEvent
+| union DeviceProcessEvents
+| where EventID == 4688 or ActionType == "ProcessCreated"
+| where ProcessCommandLine contains "run: netsh advfirewall set allprofiles state off"
+| where TimeGenerated >= ago(30d)
