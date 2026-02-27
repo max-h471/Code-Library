@@ -1,0 +1,7 @@
+SecurityEvent
+| where EventID == 4688
+| where (NewProcessName contains "sysinfo.exe" or NewProcessName contains "reg.exe") and CommandLine contains ```reg*query HKLM\\SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum```
+| union 
+DeviceProcessEvents
+| where ActionType == "ProcessCreated"
+| where (FileName contains "sysinfo.exe" or FileName contains "reg.exe") and ProcessCommandLine contains ```reg*query HKLM\\SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum```
