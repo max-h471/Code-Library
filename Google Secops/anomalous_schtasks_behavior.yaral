@@ -1,0 +1,35 @@
+rule anomalous_schtasks_behavior {
+
+  meta:
+    author = "max-h471"
+    description = "This alert will detect when a scheduled task is created or modified. Adversaries may achieve persistence by adding a task that runs on a schedule for malware resintallation or other access"
+    log_type = "MICROSOFT_DEFENDER_ENDPOINT"
+    playbook = "Malicious File Check"
+    severity = "Low"
+    mitre_attack_technique_id = "T1053"
+
+  events:
+$e.metadata.log_type = "MICROSOFT_DEFENDER_ENDPOINT"
+/*
+schtasks.exe command lines to create or change a task -- other options are to run, end, delete, query, and ShowSid
+-- Create/Change will detect the intial creation of the persistence mechanism
+*/
+($e.principal.process.command_line = /(schtasks(\.exe)?) \/(create|change)/ nocase or $e.target.process.command_line = /(schtasks(\.exe)?) \/(create|change)/ nocase)
+
+  outcome:
+    $principal_process_command_line = array_distinct($e.principal.process.command_line)
+    $target_process_command_line = array_distinct($e.target.process.command_line)
+    $user_run = array_distinct($e.principal.user.userid)
+    $fill_file_path = array_distinct($e.target.process.file.full_path)
+    $hostname = array_distinct($e.principal.hostname)
+    $user_principal_label = array_distinct($e.target.user.attribute.labels["userPrincipalName"])
+
+
+    $risk_score = 40
+    $mitre_attack_tactic = "Anomalous Schtasks.exe Behavior"
+    $mitre_attack_technique = "Scheduled Task/Job"
+    $mitre_attack_technique_id = "T1053"
+
+  condition:
+    $e
+}
