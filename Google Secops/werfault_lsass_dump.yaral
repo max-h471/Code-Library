@@ -6,7 +6,6 @@ rule werfault_lsass_dump {
     rule_name = "Credential Dumping Attempt Via WerFault"
     tactic = "TA0006"
     technique = "T1003.001"
-    log_type = "MICROSOFT_DEFENDER_ENDPOINT"    
     severity = "Medium"
     false_positives = "Actual failures in lsass.exe that trigger a crash dump (unlikely), unknown cases in which WerFault accesses lsass.exe"
 
