@@ -1,0 +1,8 @@
+SecurityEvent 
+| where EventID == 1 
+| where ((NewProcessName endswith @'\curl.exe') and (CommandLine contains_cs ' -F ' or CommandLine contains ' --form ' or CommandLine contains ' -T ' or CommandLine contains ' --upload-file ' or CommandLine contains ' -d ' or CommandLine contains ' --data '))
+| union 
+    DeviceProcessEvents
+| where ActionType == "ProcessCreated"
+| where ((FileName endswith 'curl.exe') and (ProcessCommandLine contains_cs ' -F ' or ProcessCommandLine contains ' --form ' or ProcessCommandLine contains ' -T ' or ProcessCommandLine contains ' --upload-file ' or ProcessCommandLine contains ' -d ' or ProcessCommandLine contains ' --data '))
+| extend Process = ProcessCommandLine, Computer = DeviceName
