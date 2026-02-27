@@ -1,0 +1,8 @@
+// Find all devices that are internet-facing detected by defender. Defender will run port scans from MS infrastructure to determine internet exposure
+DeviceInfo
+| where TimeGenerated > ago(30d)
+| where IsInternetFacing
+// Describes to the analyst why this device is internet facing and how it was identified
+| extend InternetFacingInfo = AdditionalFields
+| extend InternetFacingReason = extractjson("$.InternetFacingReason", InternetFacingInfo, typeof(string)), InternetFacingLocalPort = extractjson("$.InternetFacingLocalPort", InternetFacingInfo, typeof(int)), InternetFacingScannedPublicPort = extractjson("$.InternetFacingScannedPublicPort", InternetFacingInfo, typeof(int)), InternetFacingScannedPublicIp = extractjson("$.InternetFacingScannedPublicIp", InternetFacingInfo, typeof(string)), InternetFacingLocalIp = extractjson("$.InternetFacingLocalIp", InternetFacingInfo, typeof(string)), InternetFacingTransportProtocol=extractjson("$.InternetFacingTransportProtocol", InternetFacingInfo, typeof(string)), InternetFacingLastSeen = extractjson("$.InternetFacingLastSeen", InternetFacingInfo, typeof(datetime)) 
+| summarize arg_max(TimeGenerated, *) by DeviceId
