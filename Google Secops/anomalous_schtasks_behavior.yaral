@@ -4,7 +4,6 @@ rule anomalous_schtasks_behavior {
     author = "max-h471"
     description = "This alert will detect when a scheduled task is created or modified. Adversaries may achieve persistence by adding a task that runs on a schedule for malware resintallation or other access"
     log_type = "MICROSOFT_DEFENDER_ENDPOINT"
-    playbook = "Malicious File Check"
     severity = "Low"
     mitre_attack_technique_id = "T1053"
 
