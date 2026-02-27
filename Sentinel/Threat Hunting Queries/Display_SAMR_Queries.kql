@@ -1,0 +1,9 @@
+// SAMR =  Security Account Manager (SAM) Remote Protocol (SAMR) and is used for managing account attributes
+// you would expect this traffic to primarily come from Domain controllers, not client machines
+// Shows a graph of which Domain are being queried via SAMR for account enumeration
+IdentityQueryEvents
+| where ActionType contains "SAMR"
+//| summarize count(), max(TimeGenerated) by DestinationDeviceName//, DeviceName
+| extend DstDeviceName = split(DestinationDeviceName, '.')[1]
+| make-series count() default=0 on TimeGenerated in range(ago(3d), now(), 1h) by tostring(DstDeviceName)
+| render timechart
