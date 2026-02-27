@@ -1,0 +1,36 @@
+rule unix_failed_logon_attempts {
+
+
+  meta:
+    author = "max-h471" 
+    description = "Identifies when failed logon attempts are 30 or higher during a 10 minute period."
+    severity = "Low"
+    mitre_attack_technique_id = "T1110"
+    mitre_attack_tactic = "Brute Force"
+    mitre_attack_technique = "Credential Access"
+    mitre_attack_url = "https://attack.mitre.org/techniques/T1110/"
+
+  events:
+    $e.principal.hostname = $hostname
+    ($e.principal.application = "auth" or $e.principal.application = "authpriv" or $e.principal.application = "kern")
+    ($e.security_result.summary = "Login Failure" nocase or $e.security_result.description = "Failed Password" nocase)
+
+
+match:
+    $user over 10m
+    
+  outcome:
+    $event_count = count_distinct($e.metadata.product_log_id)
+    $product_log_id_array = array_distinct($e.metadata.product_log_id)
+    $target_user = array_distinct($user)
+    $principal_hostname = array_distinct($e.principal.hostname)
+    $workstation_name = array_distinct($e.principal.labels["Workstation Name"])
+    $case_tile = "Unix Failed Logon Attempts"
+    $mitre_attack_technique_id = "T1110"
+    $source_application = array_distinct($e.network.application_protocol)
+ 
+
+  condition:
+// detect at 30 or more failed logins. Modify based on your risk profile
+    #e >= 30
+}
