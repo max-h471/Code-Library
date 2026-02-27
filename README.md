@@ -8,3 +8,6 @@ General Purpose scripts for various things which are generally associated with C
 
 # Google Secops
 Detection Library for Google SecOps SIEM
+
+# Google Secops
+Detection Library for Microsoft Sentinel SIEM and Defender XDR 
