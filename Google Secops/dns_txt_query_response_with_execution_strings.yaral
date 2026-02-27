@@ -1,0 +1,32 @@
+rule dns_txt_query_response_with_execution_strings {
+  
+  meta:
+    author = "max-h471"
+    description = "Detects when DNS responses have execution strings within the response"
+    Reference = "https://www.hyas.com/blog/harnessing-dns-txt-records-for-malware-execution"
+    AdversaryTools = "https://github.com/iagox86/dnscat2 and https://github.com/yarrick/iodine"
+    severity = "Medium"
+    Playbook = "Network Alerts"
+    mitre_attack_tactic = "Command and Control"
+    mitre_attack_technique = "Application Layer Protocl: DNS"
+    mitre_attack_url = "https://attack.mitre.org/techniques/T1071/004/"
+
+  events:
+    $e.metadata.event_type = "NETWORK_DNS"
+    $e.metadata.product_event_type = /DNS Response IN TXT NOERROR/
+
+    (
+    ($e.network.dns.answers.data = /.*IEX.*/) or 
+    ($e.network.dns.answers.data = /.*Invoke-Expression.*/) or 
+    ($e.network.dns.answers.data = /.*cmd\.exe.*/) or 
+    ($e.network.dns.answers.data = /.*powershell\.exe.*/) or
+    ($e.network.dns.answers.data = /.*IWR.*/) or 
+    ($e.network.dns.answers.data = /.*Invoke-WebRequest.*/)
+    )
+
+  outcome:
+    $risk_score = 75
+
+  condition:
+    $e
+}
