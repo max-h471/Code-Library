@@ -1,0 +1,7 @@
+DeviceEvents
+| extend Content = extractjson("$.ScriptContent", AdditionalFields)
+| where Content contains "Get-Process" or Content contains "tasklist" or Content contains "Get-WmiObject Win32_Process" or Content contains "Get-CimInstance Win32_Process"
+or Content contains "wmic process"
+| extend AccountCustomEntity = AccountName
+| extend HostCustomEntity = DeviceName
+| extend FileHashCustomEntity = hash_sha256(FileName)
