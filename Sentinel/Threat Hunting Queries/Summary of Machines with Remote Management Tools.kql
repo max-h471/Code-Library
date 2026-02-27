@@ -1,0 +1,6 @@
+# you will have to specify whatever the tool may be in this query
+DeviceNetworkEvents
+| where Timestamp between (datetime(2025-01-20 00:00:00)..datetime(2025-02-04 00:00:00))
+| where InitiatingProcessFileName has_any (“mremoteng.exe, “goto opener.exe”, “bomgar-scc.exe”, 
+“strwinclt.exe”, “anydesk.exe”, “rustdesk.exe”, “srhttpd.exe”, “vncviewer.exe”, 
+“screenconnect.windowsclient.exe”, “lmi_rescue_srv.exe”, “scbackend.exe”, “scproxy.exe”, "teamviewer.exe")
