@@ -37,6 +37,7 @@ function Show-RegistryItem {
 
 # Startup folders in registry
 Show-RegistryItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnceEx" "RunOnceEx (HKLM)"
+Show-RegistryItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnceEx"
 Show-RegistryItem "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "User Shell Folders (HKCU)"
 Show-RegistryItem "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Shell Folders (HKCU)"
 Show-RegistryItem "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Shell Folders (HKLM)"
